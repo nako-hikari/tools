@@ -7,73 +7,105 @@ fileInput.addEventListener('change', async (e) => {
     if (!file) return;
 
     statusBox.style.display = 'block';
-    statusBox.innerText = 'Reading file...';
+    statusBox.innerText = 'Reading file stream...';
     grid.innerHTML = '';
 
     const reader = new FileReader();
-    reader.onload = async function(evt) {
+    reader.onload = function(evt) {
         const u8 = new Uint8Array(evt.target.result);
-        statusBox.innerText = 'Unzipping world archive...';
+        let foundCount = 0;
 
-        fflate.unzip(u8, (err, unzipped) => {
-            if (err) {
-                statusBox.innerText = 'Failed to parse zip. Ensure it is a valid .mcworld archive.';
-                return;
+        statusBox.innerText = 'Streaming world archive...';
+
+        // Use streaming unzip to prevent mobile memory crashes
+        const uz = new fflate.Unzip();
+        
+        uz.onfile = (fileEntry) => {
+            const path = fileEntry.name;
+            
+            // Skip everything that isn't database or modern structure folders
+            if (!path.includes('db/') && !path.includes('structures/')) {
+                return; 
             }
 
-            statusBox.innerText = 'Searching database logs for structures...';
-            let foundCount = 0;
+            statusBox.innerText = `Scanning: ${path.split('/').pop()}...`;
+            
+            // Buffers to collect data chunks asynchronously
+            const chunks = [];
+            fileEntry.ondata = (err, chunk, final) => {
+                if (err) return;
+                chunks.push(chunk);
+                
+                if (final) {
+                    // Combine chunks into a single array for scanning
+                    const totalLength = chunks.reduce((acc, c) => acc + c.length, 0);
+                    const data = new Uint8Array(totalLength);
+                    let offset = 0;
+                    for (const c of chunks) {
+                        data.set(c, offset);
+                        offset += c.length;
+                    }
 
-            for (const path in unzipped) {
-                if (path.includes('db/')) {
-                    const data = unzipped[path];
-                    
-                    if (path.includes('structures/') && path.endsWith('.mcstructure')) {
+                    // Scan file
+                    if (path.endsWith('.mcstructure')) {
                         const name = path.split('/').pop();
                         buildCard(data, name);
                         foundCount++;
-                        continue;
+                    } else if (path.includes('db/000') || path.endsWith('.log') || path.endsWith('.ldb')) {
+                        const foundInFile = parseBinaryData(data);
+                        foundCount += foundInFile;
                     }
-
-                    const magic = new TextEncoder().encode("structure:");
-                    for (let i = 0; i < data.length - magic.length; i++) {
-                        let match = true;
-                        for (let j = 0; j < magic.length; j++) {
-                            if (data[i + j] !== magic[j]) {
-                                match = false;
-                                break;
-                            }
-                        }
-
-                        if (match) {
-                            let end = i + 10;
-                            while (data[end] >= 32 && data[end] <= 126 && end < data.length) {
-                                end++;
-                            }
-                            const sName = new TextDecoder().decode(data.subarray(i + 10, end)).replace(/[^a-zA-Z0-9_\-]/g, "");
-                            
-                            if (sName.length > 0) {
-                                let nbt = end;
-                                while (data[nbt] !== 0x0A && nbt < data.length) {
-                                    nbt++;
-                                }
-                                const chunk = data.subarray(nbt, nbt + 500000);
-                                buildCard(chunk, `${sName}.mcstructure`);
-                                foundCount++;
-                                i = nbt + 1000; 
-                            }
-                        }
-                    }
+                    
+                    statusBox.innerText = `Structures found so far: ${foundCount}`;
                 }
-            }
+            };
+            fileEntry.start();
+        };
 
-            statusBox.innerText = foundCount > 0 
-                ? `Finished! Successfully extracted ${foundCount} structure layouts.` 
-                : 'No structures detected in this save database. Check your in-game Structure Block settings.';
-        });
+        // Feed the data into the streamer and close it when done
+        uz.push(u8, true);
+        
+        statusBox.innerText = foundCount > 0 
+            ? `Finished! Extracted ${foundCount} structure layouts.` 
+            : 'Scan complete. No structures found inside the database files.';
     };
     reader.readAsArrayBuffer(file);
 });
+
+function parseBinaryData(data) {
+    let count = 0;
+    const magic = new TextEncoder().encode("structure:");
+    
+    for (let i = 0; i < data.length - magic.length; i++) {
+        let match = true;
+        for (let j = 0; j < magic.length; j++) {
+            if (data[i + j] !== magic[j]) {
+                match = false;
+                break;
+            }
+        }
+
+        if (match) {
+            let end = i + 10;
+            while (data[end] >= 32 && data[end] <= 126 && end < data.length) {
+                end++;
+            }
+            const sName = new TextDecoder().decode(data.subarray(i + 10, end)).replace(/[^a-zA-Z0-9_\-]/g, "");
+            
+            if (sName.length > 0) {
+                let nbt = end;
+                while (data[nbt] !== 0x0A && nbt < data.length) {
+                    nbt++;
+                }
+                const chunk = data.subarray(nbt, nbt + 500000);
+                buildCard(chunk, `${sName}.mcstructure`);
+                count++;
+                i = nbt + 1000; 
+            }
+        }
+    }
+    return count;
+}
 
 function buildCard(bytes, filename) {
     const card = document.createElement('div');
