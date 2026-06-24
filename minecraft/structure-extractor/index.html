@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="css/nako.css">
 
     <script type="importmap">
-        {
-            "imports": {
-                "mcbe-leveldb-reader": "https://esm.sh/mcbe-leveldb-reader@2.0.1?exports=extractStructureFilesFromMcworld"
-            }
+    {
+        "imports": {
+            "mcbe-leveldb-reader": "https://esm.sh/mcbe-leveldb-reader@2.0.1?exports=extractStructureFilesFromMcworld",
+            "@zip.js/zip.js": "https://esm.sh/@zip.js/zip.js@^2.7.57?exports=ZipReader,BlobReader,BlobWriter"
         }
+    }
     </script>
 </head>
+
 <body>
 
 <div class="wrapper">
@@ -29,12 +31,13 @@
             </button>
         </div>
 
-        <div id="status" class="output-box" style="display:none;"></div>
+        <div id="status" class="output-box"></div>
     </div>
 
     <div id="results" class="overflow-auto" style="margin-top: 20px;"></div>
 </div>
 
 <script src="js/app.js" type="module"></script>
+
 </body>
 </html>
