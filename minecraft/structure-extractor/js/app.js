@@ -1,3 +1,10 @@
+window.onerror = function(msg, src, line, col, err) {
+    console.error("ERROR:", msg);
+    console.error(err);
+};
+
+console.log("APP STARTED");
+
 import { extractStructures } from "./mcworld.js";
 
 const fileInput = document.getElementById("upload");
