@@ -13,7 +13,6 @@ fileInput.addEventListener('change', async (e) => {
     grid.innerHTML = '';
 
     try {
-        // Run HoloPrint's internal database extraction process
         const files = await extractStructureFilesFromMcworld(file);
         const keys = Object.keys(files);
 
