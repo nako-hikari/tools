@@ -9,30 +9,40 @@ fileInput.addEventListener('change', async (e) => {
     if (!file) return;
 
     statusBox.style.display = 'block';
-    statusBox.innerText = 'Initializing LevelDB stream reader...';
+    statusBox.innerText = 'Reading world file bytes...';
     grid.innerHTML = '';
 
-    try {
-        const files = await extractStructureFilesFromMcworld(file);
-        const keys = Object.keys(files);
+    const reader = new FileReader();
+    reader.onload = async function(evt) {
+        try {
+            statusBox.innerText = 'Extracting structures via LevelDB stream...';
+            
+            // Convert the uploaded file into a clean byte array for the decoder
+            const fileData = new Uint8Array(evt.target.result);
+            
+            // This is the exact function HoloPrint uses to grab those 20 files
+            const files = await extractStructureFilesFromMcworld(fileData);
+            const keys = Object.keys(files);
 
-        if (keys.length === 0) {
-            statusBox.innerText = 'No structures detected in this save. Make sure you saved them inside an in-game Structure Block first.';
-            return;
+            if (keys.length === 0) {
+                statusBox.innerText = 'No structures found. Double check that you hit Save to Disk in-game.';
+                return;
+            }
+
+            statusBox.innerText = `Successfully extracted ${keys.length} structure layouts!`;
+
+            keys.forEach(path => {
+                const filename = path.split('/').pop();
+                buildCard(files[path], filename);
+            });
+
+        } catch (err) {
+            statusBox.innerText = 'Failed to extract structures. Make sure the file isn\'t corrupted.';
+            console.error(err);
         }
-
-        statusBox.innerText = `Successfully extracted ${keys.length} structure(s).`;
-
-        keys.forEach(path => {
-            const filename = path.split('/').pop();
-            const binaryData = files[path];
-            buildCard(binaryData, filename);
-        });
-
-    } catch (err) {
-        statusBox.innerText = 'Error reading database. Make sure it is a valid, uncorrupted .mcworld file.';
-        console.error(err);
-    }
+    };
+    
+    reader.readAsArrayBuffer(file);
 });
 
 function buildCard(bytes, filename) {
