@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Bedrock Sound List</title>
+    <style>
+        :root {
+            --bg-color: #0e0e11;
+            --container-bg: #18181f;
+            --input-bg: #0f0f12;
+            --box-bg: #0f0f12;
+            --border-color: #2d2d38;
+            --accent-dark: #663657;
+            --accent-dark-hover: #81456e;
+            --accent-light: #A77A99;
+            --accent-light-hover: #c5a4bc;
+            --text-bright: #ffffff;
+            --text-main: #b4b4bc;
+            --text-muted: #5a5a66;
+            --text-codeblock: #C77E4F;
+            --text-clickable-link: #52BBE8;
+            --text-pale-purple: #9575cd;
+            --success-bg: #2a4f32;
+            --success-border: #3b6e47;
+            --impulse: #C77E4F;
+            --impulse-pale: #261b14;
+            --chain: #76B297;
+            --chain-pale: #18221e;
+            --repeat: #6A4FC7;
+            --repeat-pale: #171424;
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 12px;
+            --space-lg: 16px;
+            --space-xl: 20px;
+            --space-2xl: 24px;
+            --max-width: 900px;
+            --radius-sm: 4px;
+            --radius-md: 6px;
+            --radius-lg: 8px;
+            --border-width: 1px;
+            --shadow-deep: 0 6px 16px rgba(0, 0, 0, 0.6);
+            --shadow-soft: 0 2px 6px rgba(0, 0, 0, 0.3);
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color-scheme: light dark;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--space-2xl) var(--space-lg);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: var(--space-lg) var(--space-sm);
+            }
+        }
+
+        img {
+            color-scheme: only light !important;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: var(--max-width);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--text-bright);
+            margin: 0;
+            text-align: left;
+        }
+
+        .credits {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-main);
+            margin-top: -12px;
+        }
+
+        .credits a {
+            color: var(--text-clickable-link);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .credits a:hover {
+            text-decoration: underline;
+        }
+
+        .credits img {
+            width: 14px;
+            height: 14px;
+            filter: brightness(0) invert(1) !important;
+        }
+
+        .controls-card {
+            background: var(--container-bg);
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-deep);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .search input {
+            width: 100%;
+            padding: var(--space-md);
+            background: var(--input-bg);
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-bright);
+            font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
+            outline: none;
+            transition: border-color var(--transition-fast);
+        }
+
+        .search input:focus {
+            border-color: var(--accent-light);
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            user-select: none;
+        }
+
+        .filter-row input[type="checkbox"] {
+            accent-color: var(--accent-light);
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
+        .filter-row label {
+            cursor: pointer;
+            color: var(--text-main);
+            font-size: 13px;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            border-top: var(--border-width) solid var(--border-color);
+            padding-top: var(--space-md);
+        }
+
+        .pagination-box {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .pagesize select {
+            padding: var(--space-sm) var(--space-md);
+            background: var(--input-bg);
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-bright);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .pager {
+            display: flex;
+            gap: var(--space-xs);
+            align-items: center;
+        }
+
+        .muted {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .btn {
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-md);
+            border: var(--border-width) solid var(--border-color);
+            background: var(--accent-dark);
+            color: var(--text-bright);
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+        }
+
+        .btn:hover {
+            background: var(--accent-dark-hover);
+        }
+
+        .btn:active {
+            border-color: var(--accent-light-hover);
+            background: #1e1924;
+            transform: scale(0.98);
+        }
+
+        .btn.secondary {
+            padding: var(--space-xs) var(--space-sm);
+            font-size: 12px;
+            background: var(--input-bg);
+            color: var(--text-main);
+        }
+
+        .btn.secondary:hover {
+            color: var(--text-bright);
+            border-color: var(--accent-light);
+        }
+
+        .btn.play.playing {
+            background: var(--success-bg);
+            border-color: var(--success-border);
+        }
+
+        .btn.disabled {
+            background: var(--input-bg) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-muted) !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+        }
+
+        .list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .card {
+            background: var(--container-bg);
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-lg);
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-lg);
+            transition: border-color var(--transition-normal);
+        }
+
+        @media (max-width: 680px) {
+            .card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-md);
+            }
+            .card .card-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+
+        .card:hover {
+            border-color: #3d3d4c;
+        }
+
+        .title {
+            font-weight: 600;
+            color: var(--text-bright);
+            word-break: break-all;
+            font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+            flex-wrap: wrap;
+        }
+
+        .pitch-container {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .label {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        input[type="range"] {
+            width: 110px;
+            accent-color: var(--accent-light);
+        }
+
+        .pitch-val {
+            min-width: 24px;
+            text-align: right;
+        }
+
+        .white-icon {
+            filter: brightness(0) invert(1) !important;
+            display: inline-block;
+            font-style: normal;
+        }
+
+        .footer {
+            margin-top: var(--space-2xl, 32px);
+            padding-bottom: var(--space-lg, 16px);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm, 8px);
+            align-items: center;
+            width: 100%;
+        }
+
+        .footer-title {
+            font-size: 12px;
+            color: var(--text-muted, #5a5a66);
+            opacity: 0.75;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--space-md, 12px);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-links a {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-light, #A77A99);
+            text-decoration: none;
+            font-size: 13px;
+            opacity: 0.85;
+            transition: opacity var(--transition-fast, 0.15s), color var(--transition-fast, 0.15s);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-light-hover, #c5a4bc);
+            opacity: 1;
+        }
+
+        .footer-links img {
+            width: 16px;
+            height: 16px;
+            color-scheme: dark !important;
+            filter: brightness(0) invert(1) !important;
+            opacity: 0.9;
+        }
+
+        .footer-links a.kofi {
+            color: #ff5fa2;
+            font-weight: 500;
+        }
+
+        .footer-links a.kofi:hover {
+            color: #ff8fc0;
+        }
+
+        .footer-links a.kofi img {
+            width: 20px;
+            height: 20px;
+            color-scheme: dark !important;
+            filter: brightness(0) invert(1) !important;
+            opacity: 0.95;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <h1>Minecraft Bedrock Sound List</h1>
+
+        <div class="credits">
+            <span>Huge thanks to</span>
+            <a href="https://github.com/1309-boy/" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub">
+                1309-boy
+            </a>
+            <span>for providing the playsound library.</span>
+        </div>
+
+        <div class="controls-card">
+            <div class="search">
+                <input id="q" type="text" placeholder="Search sounds...">
+            </div>
+
+            <div class="filter-row">
+                <input type="checkbox" id="show-missing">
+                <label for="show-missing">Show missing audio</label>
+            </div>
+            
+            <div class="meta-row">
+                <div id="count" class="muted"></div>
+                
+                <div class="pagination-box">
+                    <div class="pagesize">
+                        <select id="pagesize">
+                            <option>25</option>
+                            <option>50</option>
+                            <option selected>100</option>
+                            <option>200</option>
+                        </select>
+                    </div>
+                    <div class="pager">
+                        <button id="prev" class="btn secondary">&lt;</button>
+                        <div id="pageinfo" class="muted"></div>
+                        <button id="next" class="btn secondary">&gt;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="list" class="list"></div>
+
+        <div class="footer">
+            <div class="footer-title">By Nako Hikari</div>
+            <div class="footer-links">
+                <a href="https://github.com/nako-hikari/" target="_blank" class="social">
+                    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub">
+                    GitHub
+                </a>
+                <a href="https://m.youtube.com/@NaCryst" target="_blank" class="social">
+                    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube">
+                    YouTube
+                </a>
+                <a href="https://www.tiktok.com/@nako_hikari_mc" target="_blank" class="social">
+                    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" alt="TikTok">
+                    TikTok
+                </a>
+                <a href="https://ko-fi.com/arialicee" target="_blank" class="social kofi">
+                    <img src="https://raw.githubusercontent.com/nako-hikari/support-files/main/assets/kofi-icon.png" alt="Ko-fi">
+                    Support me on Ko-fi
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GH_BASE = 'https://1309-boy.github.io/playsoundlist';
+        const MANIFEST_URL = `${GH_BASE}/manifest.json`;
+        const DEFINITIONS_URL = `${GH_BASE}/sound_definitions.json`;
+
+        const state = {
+            items: [],
+            filtered: [],
+            itemsByName: new Map(),
+            manifestSet: new Set(),
+            page: 0,
+            pageSize: 100,
+        };
+
+        const playIndex = {};
+        let currentKey = null;
+        let currentPlayBtn = null;
+        let webCtx = null;
+        let currentSrcNode = null;
+        let nativeAudio = null;
+        const bufferCache = new Map();
+        let secretItemsCache = null;
+
+        const $list = document.getElementById('list');
+        const $count = document.getElementById('count');
+        const $q = document.getElementById('q');
+        const $showMissing = document.getElementById('show-missing');
+        const $pageinfo = document.getElementById('pageinfo');
+        const $prev = document.getElementById('prev');
+        const $next = document.getElementById('next');
+        const $pagesize = document.getElementById('pagesize');
+
+        function normalizeDefSound(s) {
+            if (!s) return null;
+            if (typeof s === 'string') return { name: s };
+            if (s.name) return { name: s.name };
+            return null;
+        }
+
+        function soundToBasePath(s) { 
+            return s.replace(/^sounds\//, ''); 
+        }
+        
+        function baseToUrl(base) { 
+            return `${GH_BASE}/sounds_flat/${base}.wav`; 
+        }
+
+        function inManifest(url) {
+            if (state.manifestSet.has(url)) return true;
+            const rel = url.replace(`${GH_BASE}/`, '');
+            if (state.manifestSet.has(rel)) return true;
+            const onlyPath = url.replace(/^https?:\/\/[^/]+\//, '');
+            return state.manifestSet.has(onlyPath);
+        }
+
+        function fmtPage() {
+            const total = state.filtered.length;
+            const pages = Math.max(1, Math.ceil(total / state.pageSize));
+            const current = Math.min(state.page + 1, pages);
+            $pageinfo.textContent = `${current}/${pages}`;
+        }
+
+        function render() {
+            $list.innerHTML = '';
+            const start = state.page * state.pageSize;
+            const end = Math.min(start + state.pageSize, state.filtered.length);
+
+            for (const item of state.filtered.slice(start, end)) {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.key = item.name;
+
+                const missingAudio = item.files_missing;
+
+                card.innerHTML = `
+                    <div class="title">${item.name}</div>
+                    <div class="card-actions">
+                        <div class="pitch-container">
+                            <span class="label">Pitch</span>
+                            <input class="pitch" type="range" min="0.1" max="2.0" step="0.1" value="1.0"/>
+                            <span class="pitch-val muted">1.0</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn play ${missingAudio ? "disabled" : ""}">${missingAudio ? `<i class="white-icon">🚫</i>` : "Play"}</button>
+                            <button class="btn secondary stop">Stop</button>
+                            ${!missingAudio ? `<button class="btn secondary download">DL</button>` : ''}
+                        </div>
+                    </div>
+                `;
+                $list.appendChild(card);
+            }
+
+            $count.textContent = `Found ${state.filtered.length} resources (${start + 1}-${end})`;
+            fmtPage();
+        }
+
+        async function applyFilter() {
+            const query = ($q.value || '').trim();
+            const checked = $showMissing.checked;
+
+            if (query === "Ara Ara") {
+                if (!secretItemsCache) {
+                    try {
+                        const RAW_JSON_URL = "https://raw.githubusercontent.com/nako-hikari/support-files/main/nothing/there-is-nothing-to-see-here.json";
+                        const response = await fetch(RAW_JSON_URL);
+                        const secretData = await response.json();
+                        
+                        secretItemsCache = secretData.map(track => ({
+                            name: track.title,
+                            files: [track.url],
+                            files_missing: false,
+                            url: track.url
+                        }));
+                    } catch (err) {
+                        console.error("Failed to load secret database:", err);
+                        $list.innerHTML = `<div class="muted" style="text-align:center; padding: 20px;">Failed to load secret vault...</div>`;
+                        return;
+                    }
+                }
+                state.filtered = secretItemsCache;
+                state.page = 0;
+                render();
+                return;
+            }
+
+            const lowerQuery = query.toLowerCase();
+            state.filtered = state.items.filter(it => {
+                const matchesQuery = !lowerQuery || it.name.toLowerCase().includes(lowerQuery);
+                const matchesMissing = checked || !it.files_missing;
+                return matchesQuery && matchesMissing;
+            });
+
+            state.page = 0;
+            render();
+        }
+
+        $q.addEventListener('input', applyFilter);
+        $showMissing.addEventListener('change', applyFilter);
+
+        $pagesize.addEventListener('change', () => {
+            state.pageSize = parseInt($pagesize.value, 10);
+            state.page = 0;
+            render();
+        });
+
+        $prev.addEventListener('click', () => { 
+            if (state.page > 0) { state.page--; render(); }
+        });
+        
+        $next.addEventListener('click', () => {
+            const pages = Math.ceil(state.filtered.length / state.pageSize);
+            if (state.page < pages - 1) { state.page++; render(); }
+        });
+
+        document.addEventListener('input', (e) => {
+            if (!e.target.matches('.pitch')) return;
+            const card = e.target.closest('.card');
+            const key = card.dataset.key;
+            const rate = parseFloat(e.target.value || '1.0');
+            card.querySelector('.pitch-val').textContent = e.target.value;
+
+            if (currentKey === key) {
+                if (currentSrcNode) {
+                    currentSrcNode.playbackRate.value = rate;
+                } else if (nativeAudio) {
+                    nativeAudio.playbackRate = rate;
+                }
+            }
+        });
+
+        document.addEventListener('click', async (e) => {
+            const playBtn = e.target.closest('.btn.play');
+            if (playBtn) {
+                if (playBtn.classList.contains('disabled')) return;
+                const card = playBtn.closest('.card');
+                playKey(card.dataset.key, playBtn);
+                return;
+            }
+
+            const stopBtn = e.target.closest('.btn.stop');
+            if (stopBtn) {
+                const card = stopBtn.closest('.card');
+                stopKey(card.dataset.key);
+                return;
+            }
+
+            const downloadBtn = e.target.closest('.btn.download');
+            if (downloadBtn) {
+                const card = downloadBtn.closest('.card');
+                const key = card.dataset.key;
+                
+                const item = state.filtered.find(it => it.name === key);
+                if (!item) return;
+
+                const url = item.url ? item.url : baseToUrl(item.files[0]);
+                if (!url) return;
+
+                downloadBtn.textContent = "⏳";
+                downloadBtn.style.pointerEvents = "none";
+
+                try {
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    const blobUrl = URL.createObjectURL(blob);
+                    
+                    const anchor = document.createElement('a');
+                    anchor.href = blobUrl;
+                    
+                    const extension = url.endsWith('.wav') ? '.wav' : '.mp3';
+                    anchor.download = `${item.name.replace(/[^a-z0-9_-]/gi, '_')}${extension}`;
+                    
+                    document.body.appendChild(anchor);
+                    anchor.click();
+                    
+                    document.body.removeChild(anchor);
+                    URL.revokeObjectURL(blobUrl);
+                } catch (error) {
+                    console.error("Download failed:", error);
+                    window.open(url, '_blank');
+                } finally {
+                    downloadBtn.textContent = "DL";
+                    downloadBtn.style.pointerEvents = "auto";
+                }
+            }
+        });
+
+        ['pointerdown', 'touchstart', 'keydown', 'mousedown'].forEach(evt => {
+            window.addEventListener(evt, unlockAudio, { once: true, passive: true });
+        });
+
+        async function unlockAudio() {
+            try {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (AC && !webCtx) webCtx = new AC();
+                if (webCtx?.state === 'suspended') await webCtx.resume();
+            } catch (_) {}
+        }
+
+        async function getBuffer(url) {
+            if (bufferCache.has(url)) return bufferCache.get(url);
+            const r = await fetch(url, { cache: 'force-cache' });
+            if (!r.ok) throw new Error('fetch fail');
+            const ab = await r.arrayBuffer();
+            const buf = await webCtx.decodeAudioData(ab);
+            bufferCache.set(url, buf);
+            return buf;
+        }
+
+        function stopCurrent() {
+            if (currentSrcNode) {
+                currentSrcNode.stop(0);
+                currentSrcNode.disconnect?.();
+            }
+            if (nativeAudio) {
+                nativeAudio.pause();
+                nativeAudio = null;
+            }
+            if (currentPlayBtn) currentPlayBtn.classList.remove('playing');
+            currentSrcNode = null;
+            currentKey = null;
+            currentPlayBtn = null;
+        }
+
+        function nextUrlFor(item) {
+            if (item.url) return item.url;
+
+            const idx = ((playIndex[item.name] || 0) % item.files.length);
+            playIndex[item.name] = idx + 1;
+            return baseToUrl(item.files[idx]);
+        }
+
+        async function playKey(key, btn) {
+            let item = state.itemsByName.get(key);
+            if (!item && secretItemsCache) {
+                item = secretItemsCache.find(it => it.name === key);
+            }
+            if (!item || item.files_missing) return;
+
+            const url = nextUrlFor(item);
+            if (!url || (!item.url && !inManifest(url))) return;
+
+            stopCurrent();
+
+            const card = document.querySelector(`.card[data-key="${CSS.escape(key)}"]`);
+            const rate = parseFloat(card.querySelector('.pitch').value || '1.0');
+
+            currentKey = key;
+            currentPlayBtn = btn;
+            btn.classList.add('playing');
+
+            if (item.url) {
+                try {
+                    nativeAudio = new Audio(url);
+                    nativeAudio.playbackRate = rate;
+                    nativeAudio.onended = () => stopCurrent();
+                    nativeAudio.onerror = () => stopCurrent();
+                    await nativeAudio.play();
+                } catch (err) {
+                    console.error("Audio playback restricted by browser context:", err);
+                    stopCurrent();
+                }
+            } else {
+                await unlockAudio();
+                try {
+                    const buf = await getBuffer(url);
+                    const src = webCtx.createBufferSource();
+                    src.buffer = buf;
+                    src.playbackRate.value = rate;
+                    src.connect(webCtx.destination);
+
+                    currentSrcNode = src;
+                    src.onended = () => stopCurrent();
+                    src.start(0);
+                } catch (err) {
+                    stopCurrent();
+                }
+            }
+        }
+
+        function stopKey(key) {
+            if (currentKey === key) stopCurrent();
+        }
+
+        async function loadManifest() {
+            const r = await fetch(MANIFEST_URL, { cache: 'no-store' });
+            const j = await r.json();
+            const urls = Array.isArray(j) ? j : j.entries?.map(e => e.url) || j.urls || j.files || [];
+            state.manifestSet = new Set(urls);
+        }
+
+        async function loadDefinitions() {
+            const r = await fetch(DEFINITIONS_URL, { cache: 'no-store' });
+            const defs = (await r.json()).sound_definitions;
+
+            const items = [];
+            const map = new Map();
+
+            for (const [name, def] of Object.entries(defs)) {
+                if (!Array.isArray(def.sounds)) continue;
+
+                const files = def.sounds
+                    .map(normalizeDefSound)
+                    .filter(Boolean)
+                    .map(s => soundToBasePath(s.name))
+                    .filter(Boolean)
+                    .filter(base => inManifest(baseToUrl(base)));
+
+                const missing = files.length === 0;
+                const maxDist = typeof def.max_distance === "number" ? def.max_distance : null;
+
+                const item = {
+                    name,
+                    files,
+                    files_missing: missing,
+                    max_distance: maxDist
+                };
+
+                items.push(item);
+                map.set(name, item);
+            }
+
+            items.sort((a, b) => a.name.localeCompare(b.name));
+            state.items = items;
+            state.itemsByName = map;
+            
+            applyFilter();
+        }
+
+        (async function init() {
+            await loadManifest();
+            await loadDefinitions();
+        })();
+    </script>
+</body>
+</html>
