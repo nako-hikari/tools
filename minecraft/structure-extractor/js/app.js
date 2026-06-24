@@ -9,40 +9,29 @@ fileInput.addEventListener('change', async (e) => {
     if (!file) return;
 
     statusBox.style.display = 'block';
-    statusBox.innerText = 'Reading world file bytes...';
+    statusBox.innerText = 'Streaming LevelDB structures directly...';
     grid.innerHTML = '';
 
-    const reader = new FileReader();
-    reader.onload = async function(evt) {
-        try {
-            statusBox.innerText = 'Extracting structures via LevelDB stream...';
-            
-            // Convert the uploaded file into a clean byte array for the decoder
-            const fileData = new Uint8Array(evt.target.result);
-            
-            // This is the exact function HoloPrint uses to grab those 20 files
-            const files = await extractStructureFilesFromMcworld(fileData);
-            const keys = Object.keys(files);
+    try {
+        const files = await extractStructureFilesFromMcworld(file);
+        const keys = Object.keys(files);
 
-            if (keys.length === 0) {
-                statusBox.innerText = 'No structures found. Double check that you hit Save to Disk in-game.';
-                return;
-            }
-
-            statusBox.innerText = `Successfully extracted ${keys.length} structure layouts!`;
-
-            keys.forEach(path => {
-                const filename = path.split('/').pop();
-                buildCard(files[path], filename);
-            });
-
-        } catch (err) {
-            statusBox.innerText = 'Failed to extract structures. Make sure the file isn\'t corrupted.';
-            console.error(err);
+        if (keys.length === 0) {
+            statusBox.innerText = 'No structures detected. Make sure you pressed "Save" on the structure block in-game.';
+            return;
         }
-    };
-    
-    reader.readAsArrayBuffer(file);
+
+        statusBox.innerText = `Successfully extracted ${keys.length} structure layouts!`;
+
+        keys.forEach(path => {
+            const filename = path.split('/').pop();
+            buildCard(files[path], filename);
+        });
+
+    } catch (err) {
+        statusBox.innerText = 'Failed to extract structures. Ensure it is a valid world archive.';
+        console.error(err);
+    }
 });
 
 function buildCard(bytes, filename) {
