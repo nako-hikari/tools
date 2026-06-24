@@ -1,4 +1,4 @@
-import { extractStructures } from "./js/mcworld.js";
+import { extractStructures } from "./mcworld.js";
 
 const fileInput = document.getElementById("upload");
 const statusBox = document.getElementById("status");
