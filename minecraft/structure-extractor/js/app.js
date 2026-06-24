@@ -1,4 +1,5 @@
 import { extractStructureFilesFromMcworld } from "mcbe-leveldb-reader";
+import { ZipReader, BlobReader } from "@zip.js/zip.js";
 
 const fileInput = document.getElementById("upload");
 const statusBox = document.getElementById("status");
@@ -9,50 +10,58 @@ fileInput.addEventListener("change", async (e) => {
     if (!file) return;
 
     statusBox.style.display = "block";
-    statusBox.innerText = "Reading world file...";
+    statusBox.innerText = "Opening world archive...";
     grid.innerHTML = "";
 
     try {
-        const arrayBuffer = await file.arrayBuffer();
+        const zipReader = new ZipReader(new BlobReader(file));
+        const entries = await zipReader.getEntries();
 
-        statusBox.innerText = "Extracting structures from world DB...";
+        const dbEntries = entries.filter(e => e.filename.startsWith("db/"));
 
-        const files = await extractStructureFilesFromMcworld(arrayBuffer);
+        if (dbEntries.length === 0) {
+            throw new Error("No db folder found in world");
+        }
 
-        const keys = Object.keys(files);
+        statusBox.innerText = "Loading LevelDB files...";
+
+        const dbBuffers = {};
+
+        for (const entry of dbEntries) {
+            if (!entry.getData) continue;
+            dbBuffers[entry.filename] = await entry.getData(new BlobWriter());
+        }
+
+        const result = await extractStructureFilesFromMcworld(file);
+
+        const keys = Object.keys(result);
 
         if (keys.length === 0) {
-            statusBox.innerText =
-                "No structures found. Make sure you saved them using a Structure Block.";
+            statusBox.innerText = "No structures found in world.";
             return;
         }
 
-        statusBox.innerText = `Success! Found ${keys.length} structure(s).`;
+        statusBox.innerText = `Extracted ${keys.length} structure(s)!`;
 
         for (const path of keys) {
             const filename = path.split("/").pop();
-            buildCard(files[path], filename);
+            buildCard(result[path], filename);
         }
 
     } catch (err) {
         console.error(err);
-        statusBox.style.display = "block";
-        statusBox.innerText =
-            "Extraction failed. Check console (F12) for details.";
+        statusBox.innerText = "Extraction failed (check console)";
     }
 });
 
 function buildCard(bytes, filename) {
     const card = document.createElement("div");
     card.className = "card";
-    card.style.marginBottom = "15px";
 
     const title = document.createElement("h3");
     title.innerText = filename;
 
-    const blob = new Blob([bytes], {
-        type: "application/octet-stream"
-    });
+    const blob = new Blob([bytes], { type: "application/octet-stream" });
 
     const url = URL.createObjectURL(blob);
 
@@ -60,25 +69,9 @@ function buildCard(bytes, filename) {
     dl.href = url;
     dl.download = filename;
     dl.className = "primary interactive";
-    dl.innerText = "Download .mcstructure";
-
-    const copy = document.createElement("button");
-    copy.className = "secondary interactive";
-    copy.innerText = "Copy Name";
-
-    copy.onclick = async () => {
-        await navigator.clipboard.writeText(
-            filename.replace(".mcstructure", "")
-        );
-
-        const old = copy.innerText;
-        copy.innerText = "Copied!";
-        setTimeout(() => (copy.innerText = old), 1000);
-    };
+    dl.innerText = "Download";
 
     card.appendChild(title);
     card.appendChild(dl);
-    card.appendChild(copy);
-
     grid.appendChild(card);
 }
