@@ -1,3 +1,5 @@
+import { extractStructureFilesFromMcworld } from 'mcbe-leveldb-reader';
+
 const fileInput = document.getElementById('upload');
 const statusBox = document.getElementById('status');
 const grid = document.getElementById('results');
@@ -7,105 +9,32 @@ fileInput.addEventListener('change', async (e) => {
     if (!file) return;
 
     statusBox.style.display = 'block';
-    statusBox.innerText = 'Reading file stream...';
+    statusBox.innerText = 'Initializing LevelDB stream reader...';
     grid.innerHTML = '';
 
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-        const u8 = new Uint8Array(evt.target.result);
-        let foundCount = 0;
+    try {
+        // Run HoloPrint's internal database extraction process
+        const files = await extractStructureFilesFromMcworld(file);
+        const keys = Object.keys(files);
 
-        statusBox.innerText = 'Streaming world archive...';
-
-        // Use streaming unzip to prevent mobile memory crashes
-        const uz = new fflate.Unzip();
-        
-        uz.onfile = (fileEntry) => {
-            const path = fileEntry.name;
-            
-            // Skip everything that isn't database or modern structure folders
-            if (!path.includes('db/') && !path.includes('structures/')) {
-                return; 
-            }
-
-            statusBox.innerText = `Scanning: ${path.split('/').pop()}...`;
-            
-            // Buffers to collect data chunks asynchronously
-            const chunks = [];
-            fileEntry.ondata = (err, chunk, final) => {
-                if (err) return;
-                chunks.push(chunk);
-                
-                if (final) {
-                    // Combine chunks into a single array for scanning
-                    const totalLength = chunks.reduce((acc, c) => acc + c.length, 0);
-                    const data = new Uint8Array(totalLength);
-                    let offset = 0;
-                    for (const c of chunks) {
-                        data.set(c, offset);
-                        offset += c.length;
-                    }
-
-                    // Scan file
-                    if (path.endsWith('.mcstructure')) {
-                        const name = path.split('/').pop();
-                        buildCard(data, name);
-                        foundCount++;
-                    } else if (path.includes('db/000') || path.endsWith('.log') || path.endsWith('.ldb')) {
-                        const foundInFile = parseBinaryData(data);
-                        foundCount += foundInFile;
-                    }
-                    
-                    statusBox.innerText = `Structures found so far: ${foundCount}`;
-                }
-            };
-            fileEntry.start();
-        };
-
-        // Feed the data into the streamer and close it when done
-        uz.push(u8, true);
-        
-        statusBox.innerText = foundCount > 0 
-            ? `Finished! Extracted ${foundCount} structure layouts.` 
-            : 'Scan complete. No structures found inside the database files.';
-    };
-    reader.readAsArrayBuffer(file);
-});
-
-function parseBinaryData(data) {
-    let count = 0;
-    const magic = new TextEncoder().encode("structure:");
-    
-    for (let i = 0; i < data.length - magic.length; i++) {
-        let match = true;
-        for (let j = 0; j < magic.length; j++) {
-            if (data[i + j] !== magic[j]) {
-                match = false;
-                break;
-            }
+        if (keys.length === 0) {
+            statusBox.innerText = 'No structures detected in this save. Make sure you saved them inside an in-game Structure Block first.';
+            return;
         }
 
-        if (match) {
-            let end = i + 10;
-            while (data[end] >= 32 && data[end] <= 126 && end < data.length) {
-                end++;
-            }
-            const sName = new TextDecoder().decode(data.subarray(i + 10, end)).replace(/[^a-zA-Z0-9_\-]/g, "");
-            
-            if (sName.length > 0) {
-                let nbt = end;
-                while (data[nbt] !== 0x0A && nbt < data.length) {
-                    nbt++;
-                }
-                const chunk = data.subarray(nbt, nbt + 500000);
-                buildCard(chunk, `${sName}.mcstructure`);
-                count++;
-                i = nbt + 1000; 
-            }
-        }
+        statusBox.innerText = `Successfully extracted ${keys.length} structure(s).`;
+
+        keys.forEach(path => {
+            const filename = path.split('/').pop();
+            const binaryData = files[path];
+            buildCard(binaryData, filename);
+        });
+
+    } catch (err) {
+        statusBox.innerText = 'Error reading database. Make sure it is a valid, uncorrupted .mcworld file.';
+        console.error(err);
     }
-    return count;
-}
+});
 
 function buildCard(bytes, filename) {
     const card = document.createElement('div');
