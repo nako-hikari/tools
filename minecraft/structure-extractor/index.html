@@ -5,13 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCPE Structure Extractor</title>
     <link rel="stylesheet" href="css/nako.css">
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "mcbe-leveldb-reader": "https://esm.sh/mcbe-leveldb-reader@2.0.1?exports=extractStructureFilesFromMcworld"
+            }
+        }
+    </script>
 </head>
 <body>
 
 <div class="wrapper">
     <div class="card">
         <h1>MCPE Structure Extractor</h1>
-        <p>Drop a <code>.mcworld</code> or <code>.zip</code> file below. This tool scans the LevelDB binary data directly in your browser to extract saved structures, bypassing the broken mobile export button.</p>
+        <p>Drop a <code>.mcworld</code> or <code>.zip</code> file below. This tool extracts saved structures using native LevelDB decoding streams.</p>
         
         <div style="margin: 20px 0;">
             <input type="file" id="upload" accept=".mcworld,.zip" style="display:none;">
@@ -46,7 +54,6 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/lib/browser.cjs"></script>
-<script src="js/app.js"></script>
+<script src="js/app.js" type="module"></script>
 </body>
 </html>
