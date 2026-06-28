@@ -65,14 +65,65 @@ async function loadModel() {
 
     const geo = await fetch(geoUrl).then(r => r.json())
     const tex = await new THREE.TextureLoader().loadAsync(texUrl)
+    tex.magFilter = THREE.NearestFilter
+    tex.minFilter = THREE.NearestFilter
 
     modelRoot = new THREE.Group()
     scene.add(modelRoot)
 
-    const mat = new THREE.MeshStandardMaterial({ map: tex })
+    const material = new THREE.MeshStandardMaterial({ map: tex })
 
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), mat)
-    modelRoot.add(mesh)
+    const geometryData = geo["minecraft:geometry"][0]
+
+    const bones = {}
+
+    function createBone(boneData) {
+        const bone = new THREE.Group()
+        bone.name = boneData.name
+
+        const pivot = boneData.pivot || [0, 0, 0]
+        bone.position.set(pivot[0] / 16, pivot[1] / 16, pivot[2] / 16)
+
+        bones[boneData.name] = bone
+
+        if (boneData.cubes) {
+            boneData.cubes.forEach(cube => {
+                const size = cube.size || [1, 1, 1]
+                const origin = cube.origin || [0, 0, 0]
+
+                const box = new THREE.BoxGeometry(
+                    size[0] / 16,
+                    size[1] / 16,
+                    size[2] / 16
+                )
+
+                const mesh = new THREE.Mesh(box, material)
+
+                mesh.position.set(
+                    (origin[0] + size[0] / 2) / 16,
+                    (origin[1] + size[1] / 2) / 16,
+                    (origin[2] + size[2] / 2) / 16
+                )
+
+                bone.add(mesh)
+            })
+        }
+
+        return bone
+    }
+
+    geometryData.bones.forEach(b => {
+        bones[b.name] = createBone(b)
+    })
+
+    geometryData.bones.forEach(b => {
+        const bone = bones[b.name]
+        if (b.parent && bones[b.parent]) {
+            bones[b.parent].add(bone)
+        } else {
+            modelRoot.add(bone)
+        }
+    })
 
     mixer = new THREE.AnimationMixer(modelRoot)
 }
