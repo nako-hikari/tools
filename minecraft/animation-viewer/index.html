@@ -1,1 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Animation Viewer</title>
 
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Three.js (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <h1>Minecraft Animation Viewer</h1>
+
+        <!-- VIEWPORT -->
+        <div class="card">
+            <div id="viewport" class="viewport"></div>
+        </div>
+
+        <!-- FILE INPUT -->
+        <div class="card">
+            <h2>Animation File</h2>
+            <input type="file" id="animFile" accept=".json">
+
+            <div class="output-container" style="margin-top: 12px;">
+                <div class="output-box" id="fileStatus">
+                    No animation file loaded
+                </div>
+            </div>
+        </div>
+
+        <!-- ANIMATION LIST -->
+        <div class="card">
+            <h2>Animations</h2>
+            <div id="animationList" class="animation-list"></div>
+        </div>
+
+        <!-- CONTROLS -->
+        <div class="card">
+            <div class="controls">
+
+                <button class="primary" id="playBtn">▶ Play</button>
+                <button class="secondary" id="pauseBtn">⏸ Pause</button>
+                <button class="secondary" id="stopBtn">⏹ Stop</button>
+
+            </div>
+
+            <div style="margin-top: 12px;">
+                <label>Speed</label>
+                <input type="range" id="speed" min="0.1" max="3" value="1" step="0.1">
+            </div>
+
+            <div style="margin-top: 10px;">
+                <label>
+                    <input type="checkbox" id="loop">
+                    Loop animation
+                </label>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
