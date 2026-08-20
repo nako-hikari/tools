@@ -1026,7 +1026,6 @@
             const query = ($q.value || '').trim();
             const checked = $showMissing.checked;
 
-            <!-- it's broken (`:  cuz idk how to take the sound properly.... pwease fogive mee~~ -->
             if (query === "Ara Ara") {
                 if (!secretItemsCache) {
                     try {
@@ -1377,15 +1376,29 @@
 
                 const row = document.createElement('div');
                 row.className = 'cmd-item';
-                row.innerHTML = `
-                    <span style="font-size:12px; font-weight:bold; color:var(--text-bright); flex-shrink:0;">${idx + 1}</span>
-                    <div class="cmd-code-box">
-                        <div class="cmd-code">${cmdStr}</div>
-                    </div>
-                    <button class="action-btn-styled copy-single-cmd" data-cmd="${CSS.escape(cmdStr)}" title="Copy Command">
-                        <img src="https://raw.githubusercontent.com/nako-hikari/support-files/main/assets/copy.png" alt="Copy">
-                    </button>
-                `;
+                
+                const numSpan = document.createElement('span');
+                numSpan.style.cssText = "font-size:12px; font-weight:bold; color:var(--text-bright); flex-shrink:0;";
+                numSpan.textContent = idx + 1;
+
+                const codeBox = document.createElement('div');
+                codeBox.className = 'cmd-code-box';
+                
+                const codeDiv = document.createElement('div');
+                codeDiv.className = 'cmd-code';
+                codeDiv.textContent = cmdStr;
+                codeBox.appendChild(codeDiv);
+
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'action-btn-styled copy-single-cmd';
+                copyBtn.dataset.cmd = cmdStr;
+                copyBtn.title = 'Copy Command';
+                copyBtn.innerHTML = `<img src="https://raw.githubusercontent.com/nako-hikari/support-files/main/assets/copy.png" alt="Copy">`;
+
+                row.appendChild(numSpan);
+                row.appendChild(codeBox);
+                row.appendChild(copyBtn);
+
                 $cmdResults.appendChild(row);
             });
         }
