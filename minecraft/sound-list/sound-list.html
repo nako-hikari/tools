@@ -263,22 +263,9 @@
             padding: var(--space-md) var(--space-lg);
             box-shadow: var(--shadow-soft);
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--space-lg);
+            flex-direction: column;
+            gap: var(--space-sm);
             transition: border-color var(--transition-normal);
-        }
-
-        @media (max-width: 680px) {
-            .card {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: var(--space-md);
-            }
-            .card .card-actions {
-                width: 100%;
-                justify-content: flex-start;
-            }
         }
 
         .card:hover {
@@ -290,13 +277,7 @@
             color: var(--text-bright);
             word-break: break-all;
             font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
-        }
-
-        .card-actions {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xl);
-            flex-wrap: wrap;
+            margin-bottom: 2px;
         }
 
         .pitch-container {
@@ -305,15 +286,12 @@
             gap: var(--space-sm);
         }
 
-        .action-buttons {
-            display: flex;
-            gap: var(--space-sm);
-        }
-
         .label {
             color: var(--text-muted);
             font-size: 12px;
             text-transform: uppercase;
+            width: 45px;
+            text-align: left;
         }
 
         input[type="range"] {
@@ -321,9 +299,47 @@
             accent-color: var(--accent-light);
         }
 
-        .pitch-val {
-            min-width: 24px;
-            text-align: right;
+        .card-button-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn-styled {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--input-bg);
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-bright);
+            cursor: pointer;
+            transition: border-color var(--transition-fast), background var(--transition-fast);
+            margin-left: 6px;
+            flex-shrink: 0;
+        }
+
+        .action-btn-styled:hover {
+            border-color: var(--accent-light);
+            color: var(--text-bright);
+        }
+
+        .action-btn-styled img {
+            width: 16px;
+            height: 16px;
+            filter: brightness(0) invert(1) !important;
+        }
+
+        .plus-icon {
+            color: #ffffff !important;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1;
         }
 
         .white-icon {
@@ -397,10 +413,293 @@
             filter: brightness(0) invert(1) !important;
             opacity: 0.95;
         }
+
+        .fixed-nav-btn {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 9999;
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            background: var(--accent-dark);
+            border: var(--border-width) solid var(--border-color);
+            box-shadow: var(--shadow-deep);
+            cursor: pointer;
+            transition: background var(--transition-fast), border-color var(--transition-fast);
+        }
+
+        .fixed-nav-btn:hover {
+            background: var(--accent-dark-hover);
+            border-color: var(--accent-light);
+        }
+
+        .fixed-nav-btn img {
+            width: 22px;
+            height: 22px;
+            filter: brightness(0) invert(1) !important;
+        }
+
+        .number-input {
+            width: 55px;
+            background: var(--input-bg);
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-bright);
+            font-size: 12px;
+            padding: 2px 4px;
+            text-align: right;
+            outline: none;
+        }
+
+        .number-input:focus {
+            border-color: var(--accent-light);
+        }
+
+        .window-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+            width: 100%;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .window2-controls {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--container-bg);
+            border: 1px solid var(--accent-light);
+            color: var(--text-bright);
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-deep);
+            font-size: 13px;
+            z-index: 10000;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow-deep);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .modal-title {
+            color: var(--text-bright);
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--space-md);
+        }
+
+        .gen-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .gen-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .gen-modal-content {
+            background: var(--container-bg);
+            width: 100%;
+            max-width: 600px;
+            height: 100%;
+            border-left: 1px solid var(--border-color);
+            box-shadow: var(--shadow-deep);
+            padding: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gen-modal-overlay.active .gen-modal-content {
+            transform: translateX(0);
+        }
+
+        .gen-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: var(--space-md);
+        }
+
+        .gen-modal-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: var(--text-bright);
+        }
+
+        .gen-modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .gen-modal-close:hover {
+            color: var(--text-bright);
+        }
+
+        .gen-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .gen-input-group label {
+            font-size: 12px;
+            color: var(--text-main);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .gen-input-group textarea,
+        .gen-input-group input[type="text"],
+        .gen-input-group input[type="number"] {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-bright);
+            padding: var(--space-sm) var(--space-md);
+            font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .gen-input-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .gen-input-group textarea:focus,
+        .gen-input-group input:focus {
+            border-color: var(--accent-light);
+        }
+
+        .gen-inputs-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+
+        .cmd-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cmd-code-box {
+            flex: 1;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 6px 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .cmd-code {
+            font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
+            font-size: 12px;
+            color: var(--text-codeblock);
+            display: inline-block;
+        }
+
+        .cmd-code-box::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .cmd-code-box::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 2px;
+        }
+
+        .copy-all-btn {
+            margin-top: auto;
+            width: 100%;
+        }
     </style>
 </head>
 
 <body>
+    <button id="window-toggle-btn" class="fixed-nav-btn" title="Switch Window">
+        <img id="switch-img" src="https://raw.githubusercontent.com/nako-hikari/support-files/main/assets/switch1.png" alt="Switch">
+    </button>
+
     <div class="wrap">
         <h1>Minecraft Bedrock Sound List</h1>
 
@@ -413,38 +712,55 @@
             <span>for providing the playsound library.</span>
         </div>
 
-        <div class="controls-card">
-            <div class="search">
-                <input id="q" type="text" placeholder="Search sounds...">
-            </div>
+        <!-- Main page -->
+        <div id="window1" class="window-section">
+            <div class="controls-card">
+                <div class="search">
+                    <input id="q" type="text" placeholder="Search sounds...">
+                </div>
 
-            <div class="filter-row">
-                <input type="checkbox" id="show-missing">
-                <label for="show-missing">Show missing audio</label>
-            </div>
-            
-            <div class="meta-row">
-                <div id="count" class="muted"></div>
+                <div class="filter-row">
+                    <input type="checkbox" id="show-missing">
+                    <label for="show-missing">Show missing audio</label>
+                </div>
                 
-                <div class="pagination-box">
-                    <div class="pagesize">
-                        <select id="pagesize">
-                            <option>25</option>
-                            <option>50</option>
-                            <option selected>100</option>
-                            <option>200</option>
-                        </select>
-                    </div>
-                    <div class="pager">
-                        <button id="prev" class="btn secondary">&lt;</button>
-                        <div id="pageinfo" class="muted"></div>
-                        <button id="next" class="btn secondary">&gt;</button>
+                <div class="meta-row">
+                    <div id="count" class="muted"></div>
+                    
+                    <div class="pagination-box">
+                        <div class="pagesize">
+                            <select id="pagesize">
+                                <option>25</option>
+                                <option>50</option>
+                                <option selected>100</option>
+                                <option>200</option>
+                            </select>
+                        </div>
+                        <div class="pager">
+                            <button id="prev" class="btn secondary">&lt;</button>
+                            <div id="pageinfo" class="muted"></div>
+                            <button id="next" class="btn secondary">&gt;</button>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div id="list" class="list"></div>
         </div>
 
-        <div id="list" class="list"></div>
+        <!-- 2nd page -->
+        <div id="window2" class="window-section hidden">
+            <div class="controls-card">
+                <div class="window2-controls">
+                    <button id="w2-copy-gen" class="btn">Copy</button>
+                    <button id="w2-play-all" class="btn">Play All</button>
+                    <button id="w2-stop-all" class="btn secondary">Stop</button>
+                    <button id="w2-reset" class="btn secondary">Reset</button>
+                </div>
+            </div>
+
+            <div id="w2-list" class="list"></div>
+        </div>
 
         <div class="footer">
             <div class="footer-title">By Nako Hikari</div>
@@ -469,10 +785,60 @@
         </div>
     </div>
 
+    <!-- Toast notif -->
+    <div id="toast" class="toast"></div>
+
+    <!-- confirm reset thingy -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title">Are you sure you want to clear all sounds in the testing window?</div>
+            <div class="modal-actions">
+                <button id="modal-no" class="btn secondary">No</button>
+                <button id="modal-yes" class="btn">Yes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Command generator window -->
+    <div id="gen-modal" class="gen-modal-overlay">
+        <div class="gen-modal-content">
+            <div class="gen-modal-header">
+                <h2>Command Generator</h2>
+                <button id="gen-close" class="gen-modal-close">&times;</button>
+            </div>
+
+            <div class="gen-input-group">
+                <label for="template-input">Template</label>
+                <textarea id="template-input">/execute at @a[scores={${name}=${value}+${start}}] run playsound ${string} @a ~~~ ${volume} ${pitch}</textarea>
+            </div>
+
+            <div class="gen-inputs-row">
+                <div class="gen-input-group">
+                    <label for="obj-name-input">${name} - Objective</label>
+                    <input id="obj-name-input" type="text" value="tick">
+                </div>
+                <div class="gen-input-group">
+                    <label for="start-tick-input">${start} - Starting Tick</label>
+                    <input id="start-tick-input" type="number" value="0">
+                </div>
+            </div>
+
+            <div class="gen-input-group" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
+                <label>Generated Commands</label>
+                <div id="cmd-results" class="list" style="overflow-y:auto; flex:1; gap:8px; padding-right:4px;"></div>
+            </div>
+
+            <button id="copy-all-btn" class="btn copy-all-btn">Copy All</button>
+        </div>
+    </div>
+
     <script>
         const GH_BASE = 'https://1309-boy.github.io/playsoundlist';
         const MANIFEST_URL = `${GH_BASE}/manifest.json`;
         const DEFINITIONS_URL = `${GH_BASE}/sound_definitions.json`;
+
+        const SWITCH_IMG_1 = "https://raw.githubusercontent.com/nako-hikari/support-files/main/assets/switch1.png";
+        const SWITCH_IMG_2 = "https://raw.githubusercontent.com/nako-hikari/support-files/main/assets/switch2.png";
 
         const state = {
             items: [],
@@ -481,6 +847,8 @@
             manifestSet: new Set(),
             page: 0,
             pageSize: 100,
+            currentWindow: 1,
+            window2Items: []
         };
 
         const playIndex = {};
@@ -491,6 +859,7 @@
         let nativeAudio = null;
         const bufferCache = new Map();
         let secretItemsCache = null;
+        let activeW2Sources = [];
 
         const $list = document.getElementById('list');
         const $count = document.getElementById('count');
@@ -500,6 +869,52 @@
         const $prev = document.getElementById('prev');
         const $next = document.getElementById('next');
         const $pagesize = document.getElementById('pagesize');
+
+        const $window1 = document.getElementById('window1');
+        const $window2 = document.getElementById('window2');
+        const $windowToggleBtn = document.getElementById('window-toggle-btn');
+        const $switchImg = document.getElementById('switch-img');
+        const $w2List = document.getElementById('w2-list');
+        const $w2PlayAll = document.getElementById('w2-play-all');
+        const $w2StopAll = document.getElementById('w2-stop-all');
+        const $w2Reset = document.getElementById('w2-reset');
+        const $w2CopyGen = document.getElementById('w2-copy-gen');
+
+        const $toast = document.getElementById('toast');
+        const $confirmModal = document.getElementById('confirm-modal');
+        const $modalYes = document.getElementById('modal-yes');
+        const $modalNo = document.getElementById('modal-no');
+
+        const $genModal = document.getElementById('gen-modal');
+        const $genClose = document.getElementById('gen-close');
+        const $templateInput = document.getElementById('template-input');
+        const $objNameInput = document.getElementById('obj-name-input');
+        const $startTickInput = document.getElementById('start-tick-input');
+        const $cmdResults = document.getElementById('cmd-results');
+        const $copyAllBtn = document.getElementById('copy-all-btn');
+
+        function showToast(msg) {
+            $toast.textContent = msg;
+            $toast.classList.add('show');
+            setTimeout(() => {
+                $toast.classList.remove('show');
+            }, 2500);
+        }
+
+        $windowToggleBtn.addEventListener('click', () => {
+            if (state.currentWindow === 1) {
+                state.currentWindow = 2;
+                $window1.classList.add('hidden');
+                $window2.classList.remove('hidden');
+                $switchImg.src = SWITCH_IMG_2;
+                renderWindow2();
+            } else {
+                state.currentWindow = 1;
+                $window2.classList.add('hidden');
+                $window1.classList.remove('hidden');
+                $switchImg.src = SWITCH_IMG_1;
+            }
+        });
 
         function normalizeDefSound(s) {
             if (!s) return null;
@@ -545,17 +960,21 @@
 
                 card.innerHTML = `
                     <div class="title">${item.name}</div>
-                    <div class="card-actions">
-                        <div class="pitch-container">
-                            <span class="label">Pitch</span>
-                            <input class="pitch" type="range" min="0.1" max="2.0" step="0.1" value="1.0"/>
-                            <span class="pitch-val muted">1.0</span>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn play ${missingAudio ? "disabled" : ""}">${missingAudio ? `<i class="white-icon">🚫</i>` : "Play"}</button>
-                            <button class="btn secondary stop">Stop</button>
-                            ${!missingAudio ? `<button class="btn secondary download">DL</button>` : ''}
-                        </div>
+                    <div class="pitch-container">
+                        <span class="label">Pitch</span>
+                        <input class="pitch" type="range" min="0.1" max="2.0" step="0.1" value="1.0"/>
+                        <input class="number-input pitch-num" type="number" step="any" value="1.0" data-default="1.0"/>
+                        ${!missingAudio ? `<button class="action-btn-styled download" title="Download"><img src="https://raw.githubusercontent.com/nako-hikari/support-files/main/assets/download.png" alt="Download"></button>` : ''}
+                    </div>
+                    <div class="pitch-container">
+                        <span class="label">Vol</span>
+                        <input class="volume" type="range" min="0.1" max="1.0" step="0.1" value="1.0"/>
+                        <input class="number-input vol-num" type="number" step="any" value="1.0" data-default="1.0"/>
+                        ${!missingAudio ? `<button class="action-btn-styled add-w2" title="Add to 2nd Window"><span class="plus-icon">+</span></button>` : ''}
+                    </div>
+                    <div class="card-button-row">
+                        <button class="btn play ${missingAudio ? "disabled" : ""}">${missingAudio ? `<i class="white-icon">🚫</i>` : "Play"}</button>
+                        <button class="btn secondary stop">Stop</button>
                     </div>
                 `;
                 $list.appendChild(card);
@@ -565,10 +984,49 @@
             fmtPage();
         }
 
+        function renderWindow2() {
+            $w2List.innerHTML = '';
+            if (state.window2Items.length === 0) {
+                $w2List.innerHTML = `<div class="muted" style="text-align:center; padding: 20px;">No sounds added to the testing window yet.</div>`;
+                return;
+            }
+
+            state.window2Items.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.id = item.id;
+
+                const pitchSliderVal = (item.pitch >= 0.1 && item.pitch <= 2.0) ? item.pitch : 1.0;
+                const volSliderVal = (item.volume >= 0.1 && item.volume <= 1.0) ? item.volume : 1.0;
+
+                card.innerHTML = `
+                    <div class="title">${item.name}</div>
+                    <div class="pitch-container">
+                        <span class="label">Pitch</span>
+                        <input class="pitch" type="range" min="0.1" max="2.0" step="0.1" value="${pitchSliderVal}"/>
+                        <input class="number-input pitch-num" type="number" step="any" value="${item.pitch}" data-default="1.0"/>
+                        <button class="action-btn-styled w2-duplicate" title="Duplicate"><img src="https://raw.githubusercontent.com/nako-hikari/support-files/main/assets/duplicate.png" alt="Duplicate"></button>
+                    </div>
+                    <div class="pitch-container">
+                        <span class="label">Vol</span>
+                        <input class="volume" type="range" min="0.1" max="1.0" step="0.1" value="${volSliderVal}"/>
+                        <input class="number-input vol-num" type="number" step="any" value="${item.volume}" data-default="1.0"/>
+                        <button class="action-btn-styled w2-delete" title="Delete"><img src="https://raw.githubusercontent.com/nako-hikari/support-files/main/assets/delete.png" alt="Delete"></button>
+                    </div>
+                    <div class="pitch-container">
+                        <span class="label">Tick</span>
+                        <input class="number-input tick-num" type="number" min="0" step="1" value="${item.tick}" data-default="0"/>
+                    </div>
+                `;
+                $w2List.appendChild(card);
+            });
+        }
+
         async function applyFilter() {
             const query = ($q.value || '').trim();
             const checked = $showMissing.checked;
 
+            <!-- it's broken (`:  cuz idk how to take the sound properly.... pwease fogive mee~~ -->
             if (query === "Ara Ara") {
                 if (!secretItemsCache) {
                     try {
@@ -623,21 +1081,118 @@
             if (state.page < pages - 1) { state.page++; render(); }
         });
 
-        document.addEventListener('input', (e) => {
-            if (!e.target.matches('.pitch')) return;
-            const card = e.target.closest('.card');
-            const key = card.dataset.key;
-            const rate = parseFloat(e.target.value || '1.0');
-            card.querySelector('.pitch-val').textContent = e.target.value;
-
-            if (currentKey === key) {
-                if (currentSrcNode) {
-                    currentSrcNode.playbackRate.value = rate;
-                } else if (nativeAudio) {
-                    nativeAudio.playbackRate = rate;
+        document.addEventListener('focusin', (e) => {
+            if (e.target.matches('.number-input')) {
+                const input = e.target;
+                const defVal = input.dataset.default || '1.0';
+                
+                if (input.value === defVal) {
+                    input.value = '';
+                } else {
+                    setTimeout(() => {
+                        const len = input.value.length;
+                        input.setSelectionRange(len, len);
+                    }, 0);
                 }
             }
         });
+
+        document.addEventListener('focusout', (e) => {
+            if (e.target.matches('.number-input')) {
+                if (e.target.value === '') {
+                    const defVal = e.target.dataset.default || '1.0';
+                    e.target.value = defVal;
+                    
+                    const card = e.target.closest('.card');
+                    if (card) {
+                        if (e.target.matches('.pitch-num')) {
+                            const rangeInput = card.querySelector('.pitch');
+                            if (rangeInput) rangeInput.value = defVal;
+                            updateAudioParams(card, 'pitch', parseFloat(defVal));
+                        } else if (e.target.matches('.vol-num')) {
+                            const rangeInput = card.querySelector('.volume');
+                            if (rangeInput) rangeInput.value = defVal;
+                            updateAudioParams(card, 'volume', parseFloat(defVal));
+                        } else if (e.target.matches('.tick-num')) {
+                            const id = card.dataset.id;
+                            const item = state.window2Items.find(i => i.id === id);
+                            if (item) item.tick = parseInt(defVal, 10);
+                        }
+                    }
+                }
+            }
+        });
+
+        document.addEventListener('input', (e) => {
+            const card = e.target.closest('.card');
+            if (!card) return;
+
+            if (e.target.matches('.pitch')) {
+                const val = parseFloat(e.target.value).toFixed(1);
+                const numInput = card.querySelector('.pitch-num');
+                if (numInput) numInput.value = val;
+                updateAudioParams(card, 'pitch', parseFloat(val));
+            } else if (e.target.matches('.pitch-num')) {
+                let val = e.target.value;
+                if (val !== '') {
+                    const numVal = parseFloat(val);
+                    if (!isNaN(numVal)) {
+                        const rangeInput = card.querySelector('.pitch');
+                        if (rangeInput && numVal >= 0.1 && numVal <= 2.0) {
+                            rangeInput.value = numVal;
+                        }
+                        updateAudioParams(card, 'pitch', numVal);
+                    }
+                }
+            } else if (e.target.matches('.volume')) {
+                const val = parseFloat(e.target.value).toFixed(1);
+                const numInput = card.querySelector('.vol-num');
+                if (numInput) numInput.value = val;
+                updateAudioParams(card, 'volume', parseFloat(val));
+            } else if (e.target.matches('.vol-num')) {
+                let val = e.target.value;
+                if (val !== '') {
+                    const numVal = parseFloat(val);
+                    if (!isNaN(numVal)) {
+                        const rangeInput = card.querySelector('.volume');
+                        if (rangeInput && numVal >= 0.1 && numVal <= 1.0) {
+                            rangeInput.value = numVal;
+                        }
+                        updateAudioParams(card, 'volume', numVal);
+                    }
+                }
+            } else if (e.target.matches('.tick-num')) {
+                const id = card.dataset.id;
+                const item = state.window2Items.find(i => i.id === id);
+                if (item) {
+                    let val = e.target.value;
+                    if (val !== '') {
+                        let intVal = parseInt(val, 10);
+                        if (!isNaN(intVal) && intVal >= 0) item.tick = intVal;
+                    }
+                }
+            }
+        });
+
+        function updateAudioParams(card, type, val) {
+            const key = card.dataset.key;
+            const id = card.dataset.id;
+
+            if (id) {
+                const item = state.window2Items.find(i => i.id === id);
+                if (item) {
+                    if (type === 'pitch') item.pitch = val;
+                    if (type === 'volume') item.volume = val;
+                }
+            } else if (key && currentKey === key) {
+                if (currentSrcNode) {
+                    if (type === 'pitch') currentSrcNode.playbackRate.value = val;
+                } else if (nativeAudio) {
+                    if (type === 'pitch') nativeAudio.playbackRate = val;
+                    if (type === 'volume') nativeAudio.volume = Math.min(1, Math.max(0, val));
+                }
+            }
+        }
 
         document.addEventListener('click', async (e) => {
             const playBtn = e.target.closest('.btn.play');
@@ -655,7 +1210,7 @@
                 return;
             }
 
-            const downloadBtn = e.target.closest('.btn.download');
+            const downloadBtn = e.target.closest('.download');
             if (downloadBtn) {
                 const card = downloadBtn.closest('.card');
                 const key = card.dataset.key;
@@ -666,7 +1221,6 @@
                 const url = item.url ? item.url : baseToUrl(item.files[0]);
                 if (!url) return;
 
-                downloadBtn.textContent = "⏳";
                 downloadBtn.style.pointerEvents = "none";
 
                 try {
@@ -689,9 +1243,211 @@
                     console.error("Download failed:", error);
                     window.open(url, '_blank');
                 } finally {
-                    downloadBtn.textContent = "DL";
                     downloadBtn.style.pointerEvents = "auto";
                 }
+                return;
+            }
+
+            const addW2Btn = e.target.closest('.add-w2');
+            if (addW2Btn) {
+                const card = addW2Btn.closest('.card');
+                const key = card.dataset.key;
+                const pitchRaw = card.querySelector('.pitch-num').value;
+                const volRaw = card.querySelector('.vol-num').value;
+
+                const pitch = parseFloat(pitchRaw) || 1.0;
+                const volume = parseFloat(volRaw) || 1.0;
+                
+                state.window2Items.push({
+                    id: 'w2_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    name: key,
+                    pitch: pitch,
+                    volume: volume,
+                    tick: 0
+                });
+
+                showToast(`added ${key} to testing window`);
+                return;
+            }
+
+            const w2DeleteBtn = e.target.closest('.w2-delete');
+            if (w2DeleteBtn) {
+                const card = w2DeleteBtn.closest('.card');
+                const id = card.dataset.id;
+                state.window2Items = state.window2Items.filter(i => i.id !== id);
+                renderWindow2();
+                return;
+            }
+
+            const w2DuplicateBtn = e.target.closest('.w2-duplicate');
+            if (w2DuplicateBtn) {
+                const card = w2DuplicateBtn.closest('.card');
+                const id = card.dataset.id;
+                const item = state.window2Items.find(i => i.id === id);
+                if (item) {
+                    state.window2Items.push({
+                        ...item,
+                        id: 'w2_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+                    });
+                    renderWindow2();
+                }
+                return;
+            }
+
+            const copySingleBtn = e.target.closest('.copy-single-cmd');
+            if (copySingleBtn) {
+                const text = copySingleBtn.dataset.cmd;
+                navigator.clipboard.writeText(text);
+                showToast("Command copied!");
+                return;
+            }
+        });
+
+        function stopAllW2Playback() {
+            stopCurrent();
+            activeW2Sources.forEach(s => {
+                try { s.stop(); } catch(e) {}
+            });
+            activeW2Sources = [];
+        }
+
+        $w2StopAll.addEventListener('click', () => {
+            stopAllW2Playback();
+        });
+
+        $w2Reset.addEventListener('click', () => {
+            $confirmModal.classList.add('active');
+        });
+
+        $modalNo.addEventListener('click', () => {
+            $confirmModal.classList.remove('active');
+        });
+
+        $modalYes.addEventListener('click', () => {
+            $confirmModal.classList.remove('active');
+            stopAllW2Playback();
+            state.window2Items = [];
+            renderWindow2();
+        });
+
+        $w2CopyGen.addEventListener('click', () => {
+            if ($genModal.classList.contains('active')) {
+                $genModal.classList.remove('active');
+            } else {
+                updateCommandResults();
+                $genModal.classList.add('active');
+            }
+        });
+
+        $genClose.addEventListener('click', () => {
+            $genModal.classList.remove('active');
+        });
+
+        [$templateInput, $objNameInput, $startTickInput].forEach(el => {
+            el.addEventListener('input', updateCommandResults);
+        });
+
+        function parseCommandForItem(item) {
+            const template = $templateInput.value;
+            const objName = $objNameInput.value || "tick";
+            const startTick = parseInt($startTickInput.value, 10) || 0;
+            const calcScore = (item.tick || 0) + startTick;
+
+            let result = template;
+            result = result.replaceAll('${name}', objName);
+            result = result.replaceAll('${value}+${start}', calcScore);
+            result = result.replaceAll('${value}', item.tick || 0);
+            result = result.replaceAll('${start}', startTick);
+            result = result.replaceAll('${string}', item.name);
+            result = result.replaceAll('${volume}', item.volume);
+            result = result.replaceAll('${pitch}', item.pitch);
+
+            return result;
+        }
+
+        function updateCommandResults() {
+            $cmdResults.innerHTML = '';
+            if (state.window2Items.length === 0) {
+                $cmdResults.innerHTML = `<div class="muted" style="padding: 10px 0;">if you see this....   it means u haven't add anything to the testing window yet..</div>`;
+                return;
+            }
+
+            state.window2Items.forEach((item, idx) => {
+                const cmdStr = parseCommandForItem(item);
+
+                const row = document.createElement('div');
+                row.className = 'cmd-item';
+                row.innerHTML = `
+                    <span style="font-size:12px; font-weight:bold; color:var(--text-bright); flex-shrink:0;">${idx + 1}</span>
+                    <div class="cmd-code-box">
+                        <div class="cmd-code">${cmdStr}</div>
+                    </div>
+                    <button class="action-btn-styled copy-single-cmd" data-cmd="${CSS.escape(cmdStr)}" title="Copy Command">
+                        <img src="https://raw.githubusercontent.com/nako-hikari/support-files/main/assets/copy.png" alt="Copy">
+                    </button>
+                `;
+                $cmdResults.appendChild(row);
+            });
+        }
+
+        $copyAllBtn.addEventListener('click', () => {
+            if (state.window2Items.length === 0) return;
+            const allCmds = state.window2Items.map(item => parseCommandForItem(item)).join('\n');
+            navigator.clipboard.writeText(allCmds);
+            showToast("All commands copied!");
+        });
+
+        $w2PlayAll.addEventListener('click', async () => {
+            if (state.window2Items.length === 0) return;
+
+            stopAllW2Playback();
+            await unlockAudio();
+
+            $w2PlayAll.textContent = "Loading...";
+            $w2PlayAll.disabled = true;
+
+            try {
+                const loadedItems = await Promise.all(state.window2Items.map(async (item) => {
+                    let masterItem = state.itemsByName.get(item.name);
+                    if (!masterItem && secretItemsCache) {
+                        masterItem = secretItemsCache.find(it => it.name === item.name);
+                    }
+                    if (!masterItem || masterItem.files_missing) return null;
+
+                    const url = nextUrlFor(masterItem);
+                    if (!url) return null;
+
+                    const buf = await getBuffer(url);
+                    return {
+                        buf,
+                        pitch: item.pitch,
+                        volume: item.volume,
+                        delay: (item.tick / 20)
+                    };
+                }));
+
+                const valid = loadedItems.filter(Boolean);
+                const startTime = webCtx.currentTime + 0.1;
+
+                valid.forEach(item => {
+                    const src = webCtx.createBufferSource();
+                    const gain = webCtx.createGain();
+
+                    src.buffer = item.buf;
+                    src.playbackRate.value = item.pitch;
+                    gain.gain.value = Math.min(1, Math.max(0, item.volume));
+
+                    src.connect(gain);
+                    gain.connect(webCtx.destination);
+
+                    src.start(startTime + item.delay);
+                    activeW2Sources.push(src);
+                });
+            } catch (err) {
+                console.error("Error playing sequence:", err);
+            } finally {
+                $w2PlayAll.textContent = "Play All";
+                $w2PlayAll.disabled = false;
             }
         });
 
@@ -753,7 +1509,11 @@
             stopCurrent();
 
             const card = document.querySelector(`.card[data-key="${CSS.escape(key)}"]`);
-            const rate = parseFloat(card.querySelector('.pitch').value || '1.0');
+            const pitchRaw = card.querySelector('.pitch-num').value;
+            const volRaw = card.querySelector('.vol-num').value;
+
+            const rate = parseFloat(pitchRaw) || 1.0;
+            const vol = parseFloat(volRaw) || 1.0;
 
             currentKey = key;
             currentPlayBtn = btn;
@@ -763,6 +1523,7 @@
                 try {
                     nativeAudio = new Audio(url);
                     nativeAudio.playbackRate = rate;
+                    nativeAudio.volume = Math.min(1, Math.max(0, vol));
                     nativeAudio.onended = () => stopCurrent();
                     nativeAudio.onerror = () => stopCurrent();
                     await nativeAudio.play();
@@ -775,9 +1536,14 @@
                 try {
                     const buf = await getBuffer(url);
                     const src = webCtx.createBufferSource();
+                    const gain = webCtx.createGain();
+
                     src.buffer = buf;
                     src.playbackRate.value = rate;
-                    src.connect(webCtx.destination);
+                    gain.gain.value = Math.min(1, Math.max(0, vol));
+
+                    src.connect(gain);
+                    gain.connect(webCtx.destination);
 
                     currentSrcNode = src;
                     src.onended = () => stopCurrent();
