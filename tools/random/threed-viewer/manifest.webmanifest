@@ -1,0 +1,30 @@
+{
+  "id": "./",
+  "name": "Nako 3D Viewer",
+  "short_name": "Nako Viewer",
+  "description": "Offline 3D model viewer for GLB, GLTF and FBX with lighting, bloom and PNG export.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0e0e11",
+  "theme_color": "#0e0e11",
+  "categories": [
+    "graphics",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
